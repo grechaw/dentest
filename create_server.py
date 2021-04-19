@@ -2,26 +2,24 @@ import ray
 import anyscale
 from ray import serve
 
-import boto3
-
-s3 = boto3.client('s3')
-#s3.download_file('will-cars-ml-test',
-        #'car-pics/Acura_ILX_2013_28_16_110_15_4_70_55_179_39_FWD_5_4_4dr_SLr.jpg', 'car.jpg')
+from session_manager import launch_predictor
 
 class ResultServer():
     def __init__(self):
         pass
 
-    async def __call__(self, request):
-        return {"status":"OK"}
+    async def __call__(self, request, session_id):
+        return {"location":f"/status/{session_id}"}
     
 class ModelServer():
     def __init__(self):
         pass
 
     async def __call__(self, request):
-        s3paths = await request.json()
-        return s3paths
+        prefixes = await request.json()
+        session_id = launch_predictor(prefixes)
+        return {"status":"Started", "location":f"/status/{session_id}"}
+
 
 def setup_server():
     serve.create_backend("predict", ModelServer)
@@ -32,7 +30,7 @@ def setup_server():
             methods=["POST"])
     serve.create_endpoint("status", 
             backend="status", 
-            route="/status",
+            route="/status/{session_id}",
             methods=["GET"])
 
 def teardown_server():
@@ -41,10 +39,12 @@ def teardown_server():
 
 
 if((__name__) == "__main__"):
-    ray.init(address="auto")
-    #anyscale.session("dendra-serve").connect()
+    #ray.init(address="auto")
+    #anyscale.session("dendra-serve").app_config("seeweed-serve:1").connect()
     serve.start(detached=True)
     #serve.connect()
+    #serve.teardown_server()
 
     setup_server()
 
+#https://session-4cne62g9jztvzuwaua8uwa.anyscaleuserdata.com/serve

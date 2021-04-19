@@ -3,28 +3,28 @@ auth:
 available_node_types:
   anyscale.cpu.large:
     docker:
-      worker_image: anyscale/ray-ml@sha256:20b94d65cb5bb2556b1500c0132de0cf93abe00e243981b0b77bc23d3bec2020
+      worker_image: localhost:5555/anyscale/customer_image:build_apt_5x17dgumwejsuprhzvj1jp_1
     max_workers: 10
     node_config:
       InstanceType: m5.16xlarge
     resources: {}
   anyscale.cpu.medium:
     docker:
-      worker_image: anyscale/ray-ml@sha256:20b94d65cb5bb2556b1500c0132de0cf93abe00e243981b0b77bc23d3bec2020
+      worker_image: localhost:5555/anyscale/customer_image:build_apt_5x17dgumwejsuprhzvj1jp_1
     max_workers: 20
     node_config:
       InstanceType: m5.4xlarge
     resources: {}
   anyscale.gpu.large:
     docker:
-      worker_image: anyscale/ray-ml@sha256:91a3538ebef30871174c8b61bd3d59e3670ed53bb63dee95a26e0114ecd59006
+      worker_image: localhost:5555/anyscale/customer_image:build_apt_5x17dgumwejsuprhzvj1jp_1
     max_workers: 10
     node_config:
       InstanceType: g3.16xlarge
     resources: {}
   anyscale.gpu.medium:
     docker:
-      worker_image: anyscale/ray-ml@sha256:91a3538ebef30871174c8b61bd3d59e3670ed53bb63dee95a26e0114ecd59006
+      worker_image: localhost:5555/anyscale/customer_image:build_apt_5x17dgumwejsuprhzvj1jp_1
     max_workers: 20
     node_config:
       InstanceType: g3.4xlarge
@@ -33,7 +33,7 @@ cluster_name: default
 cluster_synced_files: []
 docker:
   container_name: ray_container
-  image: anyscale/ray-ml@sha256:20b94d65cb5bb2556b1500c0132de0cf93abe00e243981b0b77bc23d3bec2020
+  image: localhost:5555/anyscale/customer_image:build_apt_5x17dgumwejsuprhzvj1jp_1
   pull_before_run: false
 file_mounts: {}
 file_mounts_sync_continuously: false
