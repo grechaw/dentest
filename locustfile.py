@@ -1,4 +1,5 @@
 import time
+import requests
 from locust import HttpUser, task, between
 
 

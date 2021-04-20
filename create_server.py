@@ -1,8 +1,7 @@
 import ray
 import anyscale
 from ray import serve
-
-from session_manager import launch_predictor
+import time
 
 class ResultServer():
     def __init__(self):
@@ -13,12 +12,14 @@ class ResultServer():
     
 class ModelServer():
     def __init__(self):
-        pass
+        self.session_manager = ray.get_actor("session_manager")
 
     async def __call__(self, request):
         prefixes = await request.json()
-        session_id = launch_predictor(prefixes)
+        session_ref = self.session_manager.launch.remote(prefixes)
+        session_id = ray.get(session_ref)
         return {"status":"Started", "location":f"/status/{session_id}"}
+    #TODO sessions can accumulate
 
 
 def setup_server():
@@ -39,12 +40,11 @@ def teardown_server():
 
 
 if((__name__) == "__main__"):
-    #ray.init(address="auto")
+    ray.init(address="auto")
     #anyscale.session("dendra-serve").app_config("seeweed-serve:1").connect()
     serve.start(detached=True)
     #serve.connect()
     #serve.teardown_server()
-
     setup_server()
 
 #https://session-4cne62g9jztvzuwaua8uwa.anyscaleuserdata.com/serve
